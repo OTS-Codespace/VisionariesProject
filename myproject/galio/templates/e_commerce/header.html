@@ -1,0 +1,69 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="meta description">
+
+
+    <title>
+        {% block title %}
+        
+        {% endblock title %}
+    </title>
+
+
+    <!-- Site title -->
+    <title>Galio - Mega Shop Responsive Bootstrap 4 Template</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon" />
+    <!-- Bootstrap CSS -->
+    <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Font-Awesome CSS -->
+    <link href="{% static 'assets/css/font-awesome.min.css' %}" rel="stylesheet">
+    <!-- helper class css -->
+    <link href="{% static 'assets/css/helper.min.css' %}" rel="stylesheet">
+    <!-- Plugins CSS -->
+    <link href="{% static 'assets/css/plugins.css' %}" rel="stylesheet">
+    <!-- Main Style CSS -->
+    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/skin-default.css' %}" rel="stylesheet" id="galio-skin">
+
+    
+</head>
+
+
+
+
+{% block body %}
+
+
+{% endblock body %}
+    
+
+
+
+ <!--All jQuery, Third Party Plugins & Activation (main.js) Files-->
+ <script src="{% static 'assets/js/vendor/modernizr-3.6.0.min.js' %}"></script>
+ <!-- Jquery Min Js -->
+ <script src="{% static 'assets/js/vendor/jquery-3.3.1.min.js' %}"></script>
+ <!-- Popper Min Js -->
+ <script src="{% static 'assets/js/vendor/popper.min.js' %}"></script>
+ <!-- Bootstrap Min Js -->
+ <script src="{% static 'assets/js/vendor/bootstrap.min.js' %}"></script>
+ <!-- Plugins Js-->
+ <script src="{% static 'assets/js/plugins.js' %}"></script>
+ <!-- Ajax Mail Js -->
+ <script src="{% static 'assets/js/ajax-mail.js' %}"></script>
+ <!-- Active Js -->
+ <script src="{% static 'assets/js/main.js' %}"></script>
+ <!-- Switcher JS [Please Remove this when Choose your Final Projct] -->
+ <script src="{% static 'assets/js/switcher.js' %}"></script>
+
+
+</html>
