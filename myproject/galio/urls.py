@@ -1,5 +1,6 @@
 from django.urls import path
-from . import views
+from . import views, security
+
 
 
 
@@ -44,7 +45,8 @@ urlpatterns = [
     path('shopListRightSidebar/', views.shopListRightSidebar, name='shopListRightSidebar'),
     path('singleProductGroup/', views.singleProductGroup, name='singleProductGroup'),
     path('singleProductSale/', views.singleProductSale, name='singleProductSale'),
-    path('singleProduct/', views.singleProduct, name='singleProduct'),
+    path('singleProduct/<int:pk>/', views.singleProduct, name='singleProduct'),
+    # path('singleProduct/<int:pk>/', security.singleProduct, name='singleProduct'),
     path('wishlist/', views.wishlist, name='wishlist'),
     
     
