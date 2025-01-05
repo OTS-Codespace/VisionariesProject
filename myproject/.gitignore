@@ -1,0 +1,9 @@
+venv
+.ecomm
+__pycache__/
+*.py[cod]
+*.cpython-*
+
+db.sqlite3
+
+.env
