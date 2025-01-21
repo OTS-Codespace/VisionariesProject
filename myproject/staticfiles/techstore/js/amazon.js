@@ -22,8 +22,7 @@ products.forEach((product) => {
   productsHTML += `
     <div class="product-container">
       <div class="product-image-container">
-        <img class="product-image"
-          src="${product.image}">
+        <img class="product-image" src="${product.image}">
       </div>
 
       <div class="product-name limit-text-to-2-lines">
@@ -31,15 +30,14 @@ products.forEach((product) => {
       </div>
 
       <div class="product-rating-container">
-        <img class="product-rating-stars"
-          src="images/ratings/rating-${product.rating.stars * 10}.png">
+        <img class="product-rating-stars" src="images/ratings/rating-${product.rating.stars * 10}.png">
         <div class="product-rating-count link-primary">
           ${product.rating.count}
         </div>
       </div>
 
       <div class="product-price">
-        $${(product.priceCents / 100).toFixed(2)} 
+        $${(product.priceCents / 100).toFixed(2)}
       </div>
 
       <div class="product-quantity-container">
@@ -69,7 +67,6 @@ products.forEach((product) => {
       </button>
     </div>
   `;
-
 });
 
 
@@ -95,22 +92,82 @@ document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
 document.querySelectorAll('.js-add-to-cart').forEach((button) => {
   button.addEventListener('click', () => {
-    // getting the property inside the html data attribute of the add to cart button
-    const productId = (button.dataset.productId);
+    const productId = button.dataset.productId;
 
-    addToCart(productId);
+    // Check if the product already exists in the cart
+    let productInCart = cart.find(item => item.productId === productId);
 
-    // to make the cart quantity at the top interactive
-    // step 1: Calculate the quantity, the total number of products in our cart
+    if (productInCart) {
+      // If the product is already in the cart, just increase the quantity
+      productInCart.quantity++;
+    } else {
+      // If the product is not in the cart, add it with quantity 1
+      cart.push({
+        productId: productId,
+        quantity: 1
+      });
+    }
 
-    let cartQuantity = 0
+    // Now update the cart quantity displayed in the header
+    updateCartQuantityDisplay();
 
-    cart.forEach((item) => {
-      cartQuantity += item.quantity;
-    });
-    
-    document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
-    // console.log(cartQuantity);
-    // console.log(cart);
+    // Re-render the cart summary
+    renderCartSummary();
   });
-});  
+});
+
+// Function to update cart quantity in the header
+function updateCartQuantityDisplay() {
+  let totalQuantity = 0;
+  cart.forEach(item => totalQuantity += item.quantity);
+  document.querySelector('.js-cart-quantity').innerText = totalQuantity;
+}
+
+// Function to render the cart summary on the checkout page
+function renderCartSummary() {
+  let cartSummaryHTML = '';
+
+  cart.forEach((cartItem) => {
+    const productId = cartItem.productId;
+    let matchingProduct = products.find(product => product.id === productId);
+
+    cartSummaryHTML += `
+      <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
+        <div class="delivery-date">Delivery date: Tuesday, June 21</div>
+        <div class="cart-item-details-grid">
+          <img class="product-image" src="${matchingProduct.image}">
+          <div class="cart-item-details">
+            <div class="product-name">${matchingProduct.name}</div>
+            <div class="product-price">$${(matchingProduct.priceCents / 100).toFixed(2)}</div>
+            <div class="product-quantity">
+              <span>Quantity: <span class="quantity-label">${cartItem.quantity}</span></span>
+              <span class="update-quantity-link link-primary">Update</span>
+              <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchingProduct.id}">
+                Delete
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
+
+  // Add remove event listeners after rendering
+  document.querySelectorAll('.js-delete-link').forEach((link) => {
+    link.addEventListener('click', () => {
+      const productId = link.dataset.productId;
+      removeFromCart(productId);
+    });
+  });
+}
+
+function removeFromCart(productId) {
+  // Remove the product from the cart
+  cart = cart.filter(item => item.productId !== productId);
+
+  // Update the cart display after removal
+  renderCartSummary();
+  updateCartQuantityDisplay();
+}
