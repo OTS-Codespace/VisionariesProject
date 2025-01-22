@@ -6,56 +6,76 @@
 <html lang="en">
 
 {% block title %}
-
     Home - Amazon
-
 {% endblock title %}
 
-
-
-
 {% block body %}
-
     <div class="amazon-header">
       <div class="amazon-header-left-section">
-        <a href="{% url "product_list" %}" class="header-link">
-          <img class="amazon-logo"
-            src="{% static 'techstore/images/amazon-logo-white.png' %}">
-          <img class="amazon-mobile-logo"
-            src="{% static 'techstore/images/amazon-mobile-logo-white.png' %}">
+        <a href="{% url 'product_list' %}" class="header-link">
+          <img class="amazon-logo" src="{% static 'techstore/images/amazon-logo-white.png' %}">
+          <img class="amazon-mobile-logo" src="{% static 'techstore/images/amazon-mobile-logo-white.png' %}">
         </a>
       </div>
 
       <div class="amazon-header-middle-section">
         <input class="search-bar" type="text" placeholder="Search">
-
         <button class="search-button">
           <img class="search-icon" src="{% static 'techstore/images/icons/search-icon.png' %}">
         </button>
       </div>
 
       <div class="amazon-header-right-section">
-        <a class="orders-link header-link" href="{% url "orders" %}">
+        <a class="orders-link header-link" href="{% url 'orders' %}">
           <span class="returns-text">Returns</span>
           <span class="orders-text">& Orders</span>
         </a>
 
-        <a class="cart-link header-link" href="{% url "checkout" %}">
+        <a class="cart-link header-link" href="{% url 'checkout' %}">
           <img class="cart-icon" src="{% static 'techstore/images/icons/cart-icon.png' %}">
-          <div class="cart-quantity js-cart-quantity">0</div>
+          <div class="cart-quantity js-cart-quantity">{{ total_quantity }}</div>
           <div class="cart-text">Cart</div>
         </a>
       </div>
     </div>
-    
+
     <div class="main">
-      <div class="products-grid js-products-grid">
-        
-      </div>
+      <div class="products-grid js-products-grid"></div>
     </div>
-    
-    
-    
-  
+
 {% endblock body %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const cartQuantityElement = document.querySelector('.js-cart-quantity');
+
+    // Function to update cart quantity dynamically
+    function updateCartQuantity(quantity) {
+        if (cartQuantityElement) {
+            cartQuantityElement.textContent = quantity;
+        }
+    }
+
+    // Listen for "cart-updated" event
+    document.body.addEventListener('cart-updated', (event) => {
+        updateCartQuantity(event.detail.total_quantity);
+    });
+
+    // Example: After receiving response from server for adding to cart
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');  // Assuming your buttons have a class like "add-to-cart"
+
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const productId = button.dataset.productId;  // Assuming you're passing the product ID as a data attribute on the button
+            fetch('/add_to_cart/' + productId)
+                .then(response => response.json())
+                .then(data => {
+                    const event = new CustomEvent('cart-updated', { detail: { total_quantity: data.total_quantity } });
+                    document.body.dispatchEvent(event);
+                });
+        });
+    });
+  });
+</script>
+  
 </html>

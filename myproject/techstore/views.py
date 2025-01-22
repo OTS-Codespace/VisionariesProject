@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product
 from django.views.generic import View
+from django.http import JsonResponse
 # Create your views here.
 
 
@@ -20,3 +21,70 @@ class OrdersView(View):
 class TrackingView(View):
     def get(self, request):
         return render(request, 'amazon/tracking.html')
+    
+    
+    def cart_count(cart):
+        return sum(item['quantity'] for item in cart.values())
+
+def cart_view(request):
+    cart_initialize(request)
+    cart = request.session['cart']
+    cart_items = []
+    total_price = 0
+    total_quantity = cart_count(cart)
+
+    if not cart:
+        message = "Your cart is empty. Add items to your cart."
+    else:
+        message = None
+
+    for product_id, details in cart.items():
+        product = get_object_or_404(Product, id=product_id)
+        quantity = details['quantity']
+        total_price += product.price * quantity
+        cart_items.append({
+            'product': product,
+            'quantity': quantity,
+            'total_price': product.price * quantity
+        })
+
+    context = {
+        'cart_items': cart_items,
+        'total_price': total_price,
+        'total_quantity': total_quantity,
+        'message': message
+    }
+    return render(request, 'store/cart.html', context)
+
+def add_to_cart(request, product_id):
+    cart_initialize(request)
+    product = get_object_or_404(Product, id=product_id)
+    cart = request.session['cart']
+
+    if str(product_id) in cart:
+        cart[str(product_id)]['quantity'] += 1
+    else:
+        cart[str(product_id)] = {'quantity': 1}
+
+    request.session.modified = True
+    total_quantity = cart_count(cart)
+    return JsonResponse({'total_quantity': total_quantity})  # For AJAX updates
+
+def remove_from_cart(request, product_id):
+    cart_initialize(request)
+    cart = request.session['cart']
+
+    if str(product_id) in cart:
+        if cart[str(product_id)]['quantity'] > 1:
+            cart[str(product_id)]['quantity'] -= 1
+        else:
+            del cart[str(product_id)]
+
+    request.session.modified = True
+    total_quantity = cart_count(cart)
+    return JsonResponse({'total_quantity': total_quantity})  # For AJAX updates
+
+
+    
+    
+    
