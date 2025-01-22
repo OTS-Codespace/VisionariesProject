@@ -82,4 +82,39 @@
 
 
 {% endblock body %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+      const cartQuantityElement = document.querySelector('.js-cart-quantity');
+  
+      // Function to update cart quantity dynamically
+      function updateCartQuantity(quantity) {
+          if (cartQuantityElement) {
+              cartQuantityElement.textContent = quantity;
+          }
+      }
+  
+      // Listen for "cart-updated" event
+      document.body.addEventListener('cart-updated', (event) => {
+          updateCartQuantity(event.detail.total_quantity);
+      });
+  
+      // Example: After receiving response from server for adding to cart
+      const addToCartButtons = document.querySelectorAll('.add-to-cart');  // Assuming your buttons have a class like "add-to-cart"
+  
+      addToCartButtons.forEach(button => {
+          button.addEventListener('click', () => {
+              const productId = button.dataset.productId;  // Assuming you're passing the product ID as a data attribute on the button
+              fetch('/add_to_cart/' + productId)
+                  .then(response => response.json())
+                  .then(data => {
+                      const event = new CustomEvent('cart-updated', { detail: { total_quantity: data.total_quantity } });
+                      document.body.dispatchEvent(event);
+                  });
+          });
+      });
+  });
+  </script>
+  
+  <span class="js-cart-quantity">{{ total_quantity }}</span>
+  
 </html>
