@@ -1,0 +1,24 @@
+{% extends 'amazon/header.html' %}
+ {% load static %}
+
+  {% block title %} Dashboard - Amazon {% endblock title %}
+  
+  {% block body %}
+  <h1>Welcome, {{ user.username }}</h1>
+  <h2>Your Order History</h2>
+  <ul>
+    {% for order in orders %}
+    <li>{{ order }}</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Your Wishlist</h2>
+  <ul>
+    {% for item in wishlist %}
+    <li>{{ item }}</li>
+    {% endfor %}
+  </ul>
+
+  <a href="{% url 'logout' %}">Logout</a>
+  {% endblock body %}
+
