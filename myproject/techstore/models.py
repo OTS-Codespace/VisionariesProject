@@ -21,7 +21,6 @@ class Customer(AbstractUser):
     def __str__(self):
         return self.username
 
-
 # Product Model
 class Product(models.Model):
     name = models.CharField(max_length=200)
@@ -58,7 +57,6 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-
 # Order Model
 class Order(models.Model):
     STATUS_CHOICES = [
@@ -91,7 +89,6 @@ class Order(models.Model):
     def __str__(self):
         return f"Order #{self.id} - {self.customer.first_name} {self.customer.last_name}"
 
-
 # OrderItem Model
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
@@ -103,4 +100,4 @@ class OrderItem(models.Model):
         return f"{self.quantity} x {self.product.name}"
 
     def get_total_price(self):
-        return self.quantity * self.price
+        return self.quantity * his.price

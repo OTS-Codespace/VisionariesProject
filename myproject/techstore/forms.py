@@ -14,4 +14,3 @@ class CustomerRegistrationForm(UserCreationForm):
             'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
             'password1': forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}),
         }
-        

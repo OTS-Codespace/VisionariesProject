@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product
 from django.views.generic import View
 from django.http import JsonResponse
 from django.contrib.auth import login
-from .forms import CustomerRegistrationForm
 from django.contrib.auth.decorators import login_required
-# Create your views here.
+from .models import Product
+from .forms import CustomerRegistrationForm
 
+# Create your views here.
 
 class ProductListView(View):
     def get(self, request):
@@ -24,10 +24,6 @@ class OrdersView(View):
 class TrackingView(View):
     def get(self, request):
         return render(request, 'amazon/tracking.html')
-    
-from django.shortcuts import render, redirect
-from django.contrib.auth import login
-from .forms import CustomerRegistrationForm
 
 def register(request):
     if request.method == 'POST':
@@ -40,18 +36,19 @@ def register(request):
         form = CustomerRegistrationForm()
     return render(request, 'amazon/register.html', {'form': form})
 
-# @login_required
+@login_required
 def dashboard(request):
     user = request.user
     orders = user.orders.all()  # Assuming a related Order model
     wishlist = user.wishlist.all()  # Assuming a related Wishlist model
     return render(request, 'amazon/dashboard.html', {'user': user, 'orders': orders, 'wishlist': wishlist})
 
+def cart_initialize(request):
+    if 'cart' not in request.session:
+        request.session['cart'] = {}
 
-    
-    
-    def cart_count(cart):
-        return sum(item['quantity'] for item in cart.values())
+def cart_count(cart):
+    return sum(item['quantity'] for item in cart.values())
 
 def cart_view(request):
     cart_initialize(request)
@@ -112,6 +109,5 @@ def remove_from_cart(request, product_id):
     return JsonResponse({'total_quantity': total_quantity})  # For AJAX updates
 
 
-    
-    
-    
+
+
