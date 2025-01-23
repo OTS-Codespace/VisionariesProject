@@ -10,6 +10,8 @@ urlpatterns = [
     path('checkout/', CheckOutView.as_view(), name='checkout'),
     path('orders/', OrdersView.as_view(), name='orders'),
     path('tracking/', TrackingView.as_view(), name='tracking'),
+    path('cart/', views.cart_view, name='cart'),
+    path('add-to-cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
 ]
 
 if settings.DEBUG:
