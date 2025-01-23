@@ -8,10 +8,15 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
+
+
 class ProductListView(View):
     def get(self, request):
         products = Product.objects.all()
+        for product in products:
+            product.rating_stars = int(product.rating * 10)  # Pre-calculate rating stars
         return render(request, 'amazon/index.html', {'products': products})
+
     
 class CheckOutView(View):
     def get(self, request):
@@ -25,9 +30,11 @@ class TrackingView(View):
     def get(self, request):
         return render(request, 'amazon/tracking.html')
     
-from django.shortcuts import render, redirect
-from django.contrib.auth import login
-from .forms import CustomerRegistrationForm
+# class RatingStars(View):
+#     def get(self, request):
+#         products = Product.objects.all()   
+    
+
 
 def register(request):
     if request.method == 'POST':
