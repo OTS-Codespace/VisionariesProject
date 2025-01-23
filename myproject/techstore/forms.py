@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Customer
+from .models import Customer, Order
 
 class CustomerRegistrationForm(UserCreationForm):
     class Meta:
@@ -14,3 +14,8 @@ class CustomerRegistrationForm(UserCreationForm):
             'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
             'password1': forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}),
         }
+
+class CheckoutForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['shipping_address']

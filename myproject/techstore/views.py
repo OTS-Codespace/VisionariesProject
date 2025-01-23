@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import View
+from django.views.generic import View, DetailView
 from django.http import JsonResponse
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from .models import Product
-from .forms import CustomerRegistrationForm
+from .models import Product, Order, OrderItem
+from .forms import CustomerRegistrationForm, CheckoutForm
 
 # Create your views here.
 
@@ -17,6 +17,16 @@ class CheckOutView(View):
     def get(self, request):
         return render(request, 'amazon/checkout.html')
     
+    def post(self, request):
+        # Handle the form submission here
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.customer = request.user
+            order.save()
+            return redirect('orders')
+        return render(request, 'amazon/checkout.html', {'form': form})
+
 class OrdersView(View):
     def get(self, request):
         return render(request, 'amazon/orders.html')
@@ -24,6 +34,11 @@ class OrdersView(View):
 class TrackingView(View):
     def get(self, request):
         return render(request, 'amazon/tracking.html')
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'amazon/product_detail.html'
+    context_object_name = 'product'
 
 def register(request):
     if request.method == 'POST':

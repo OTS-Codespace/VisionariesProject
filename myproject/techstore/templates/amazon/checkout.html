@@ -10,9 +10,6 @@
 
 {% endblock title %}
 
-
-
-
 {% block body %}
   
     <div class="checkout-header">
@@ -73,9 +70,12 @@
             <div class="payment-summary-money">$52.51</div>
           </div>
 
-          <button class="place-order-button button-primary">
-            Place your order
-          </button>
+          <form method="post" action="{% url 'checkout' %}">
+            {% csrf_token %}
+            <button type="submit" class="place-order-button button-primary">
+              Place your order
+            </button>
+          </form>
         </div>
       </div>
     </div>
