@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product
-from django.views.generic import View
+from django.views import View
+from django.views.generic.detail import DetailView
 from django.http import JsonResponse
 from django.contrib.auth import login
-from .forms import CustomerRegistrationForm
 from django.contrib.auth.decorators import login_required
-# Create your views here.
+from .models import Product, Order, OrderItem
+from .forms import CustomerRegistrationForm, CheckoutForm
 
+# Create your views here.
 
 
 
@@ -17,11 +18,20 @@ class ProductListView(View):
             product.rating_stars = int(product.rating * 10)  # Pre-calculate rating stars
         return render(request, 'amazon/index.html', {'products': products})
 
-    
 class CheckOutView(View):
     def get(self, request):
         return render(request, 'amazon/checkout.html')
     
+    def post(self, request):
+        # Handle the form submission here
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.customer = request.user
+            order.save()
+            return redirect('orders')
+        return render(request, 'amazon/checkout.html', {'form': form})
+
 class OrdersView(View):
     def get(self, request):
         return render(request, 'amazon/orders.html')
@@ -29,6 +39,11 @@ class OrdersView(View):
 class TrackingView(View):
     def get(self, request):
         return render(request, 'amazon/tracking.html')
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'amazon/product_detail.html'
+    context_object_name = 'product'
     
 # class RatingStars(View):
 #     def get(self, request):
@@ -47,18 +62,19 @@ def register(request):
         form = CustomerRegistrationForm()
     return render(request, 'amazon/register.html', {'form': form})
 
-# @login_required
+@login_required
 def dashboard(request):
     user = request.user
     orders = user.orders.all()  # Assuming a related Order model
     wishlist = user.wishlist.all()  # Assuming a related Wishlist model
     return render(request, 'amazon/dashboard.html', {'user': user, 'orders': orders, 'wishlist': wishlist})
 
+def cart_initialize(request):
+    if 'cart' not in request.session:
+        request.session['cart'] = {}
 
-    
-    
-    def cart_count(cart):
-        return sum(item['quantity'] for item in cart.values())
+def cart_count(cart):
+    return sum(item['quantity'] for item in cart.values())
 
 def cart_view(request):
     cart_initialize(request)
@@ -119,6 +135,5 @@ def remove_from_cart(request, product_id):
     return JsonResponse({'total_quantity': total_quantity})  # For AJAX updates
 
 
-    
-    
-    
+
+
