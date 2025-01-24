@@ -9,6 +9,8 @@ from .forms import CustomerRegistrationForm, CheckoutForm
 
 # Create your views here.
 
+
+
 class ProductListView(View):
     def get(self, request):
         products = Product.objects.all()
@@ -42,6 +44,12 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = 'amazon/product_detail.html'
     context_object_name = 'product'
+    
+# class RatingStars(View):
+#     def get(self, request):
+#         products = Product.objects.all()   
+    
+
 
 def register(request):
     if request.method == 'POST':
