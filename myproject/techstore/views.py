@@ -12,8 +12,10 @@ from .forms import CustomerRegistrationForm, CheckoutForm
 class ProductListView(View):
     def get(self, request):
         products = Product.objects.all()
+        for product in products:
+            product.rating_stars = int(product.rating * 10)  # Pre-calculate rating stars
         return render(request, 'amazon/index.html', {'products': products})
-    
+
 class CheckOutView(View):
     def get(self, request):
         return render(request, 'amazon/checkout.html')
