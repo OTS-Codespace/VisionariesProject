@@ -1,5 +1,6 @@
 .main {
-  max-width: 850px;
+  /* max-width: 850px; */
+  width: 90%;
   margin-top: 90px;
   margin-bottom: 100px;
   padding-left: 20px;
@@ -118,8 +119,10 @@
 }
 
 .product-image-container img {
-  max-width: 110px;
-  max-height: 110px;
+  /* max-width: 110px;
+  max-height: 110px; */
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .product-name {
@@ -188,8 +191,11 @@
   }
 
   .product-image-container img {
-    max-width: 150px;
-    max-height: 150px;
+    /* max-width: 150px;
+    max-height: 150px; */
+
+    max-width: 100%;
+    max-height: 100%;
   }
 
   .product-name {
@@ -217,4 +223,8 @@
     width: 100%;
     padding: 12px;
   }
+}
+
+.product-container:hover{
+  background-color:rgb(248, 242, 233);
 }
