@@ -1,26 +1,11 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
-<<<<<<< HEAD
-from .views import ProductListView, ProductDetailView, CheckOutView, OrdersView, TrackingView
-
-urlpatterns = [
-    path('', ProductListView.as_view(), name='product_list'),
-    path('product/<int:pk>/', ProductDetailView.as_view(), name='product_detail'),
-=======
-<<<<<<< Updated upstream
-from .views import ProductListView,CheckOutView,OrdersView,TrackingView
-
-urlpatterns = [
-    path('', ProductListView.as_view(), name='product_list'),
-=======
 from .views import ProductListView, ProductDetailView, CheckOutView, OrdersView, TrackingView, AddToCartView, RemoveFromCartView
 
 urlpatterns = [
     path('', ProductListView.as_view(), name='product_list'),
     path('product/<int:id>/', ProductDetailView.as_view(), name='product_detail'),
->>>>>>> Stashed changes
->>>>>>> Jeff
     path('checkout/', CheckOutView.as_view(), name='checkout'),
     path('checkout/<int:id>/', views.CheckOutView.as_view(), name='checkout'),
     path('orders/', OrdersView.as_view(), name='orders'),

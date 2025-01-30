@@ -91,35 +91,10 @@
                     </div>
                 </a>
 
-<<<<<<< Updated upstream
-                <div class="product-price">
-                    ₦{{ product.price }}
-                </div>
-
-                <div class="product-quantity-container">
-                    <select>
-                        {% comment %} {% for i in 1|range:11 %}
-                        <option value="{{ i }}">{{ i }}</option>
-                        {% endfor %} {% endcomment %}
-                    </select>
-                </div>
-
-                <div class="product-spacer"></div>
-
-                <div class="added-to-cart">
-                    <img src="{% static 'techstore/images/icons/checkmark.png' %}" alt="Added to Cart">
-                    Added
-                </div>
-
-                <button class="add-to-cart-button button-primary js-add-to-cart" data-product-id="{{ product.id }}">
-                    Add to Cart
-                </button>
-=======
                 <form method="POST" action="{% url 'add_to_cart' product.id %}">
                     {% csrf_token %}
                     <button class="add-to-cart-button button-primary">Add to Cart</button>
                 </form>
->>>>>>> Stashed changes
             </div>
             {% endfor %}
         </div>

@@ -109,30 +109,6 @@
             <div class="payment-summary-money">₦{{ order_summary.shipping_cost|floatformat:2 }}</div>
         </div>
 
-        <div class="payment-summary-row subtotal-row">
-            <div>Total before tax:</div>
-<<<<<<< Updated upstream
-            <div class="payment-summary-money">$47.74</div>
-          </div>
-
-          <div class="payment-summary-row">
-            <div>Estimated tax (10%):</div>
-            <div class="payment-summary-money">$4.77</div>
-          </div>
-
-          <div class="payment-summary-row total-row">
-            <div>Order total:</div>
-            <div class="payment-summary-money">$52.51</div>
-          </div>
-
-          <button class="place-order-button button-primary">
-            Place your order
-          </button>
-=======
-            <div class="payment-summary-money">₦{{ order_summary.total_price|floatformat:2 }}</div>
->>>>>>> Stashed changes
-        </div>
-
         <div class="payment-summary-row">
             <div>Estimated tax ({{ order_summary.tax_rate }}%):</div>
             <div class="payment-summary-money">₦{{ order_summary.tax|floatformat:2 }}</div>
