@@ -101,3 +101,18 @@
     width: auto;
   }
 }
+
+
+.remove-button {
+  background-color: #ff4d4d;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.remove-button:hover {
+  background-color: #cc0000;
+}
