@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
+from decimal import Decimal
 
 
 # Category Model
@@ -101,4 +102,13 @@ class OrderItem(models.Model):
         return f"{self.quantity} x {self.product.name}"
 
     def get_total_price(self):
+<<<<<<< HEAD
         return self.quantity * his.price
+=======
+<<<<<<< Updated upstream
+        return self.quantity * self.price
+=======
+        return self.price * Decimal(self.quantity)
+
+>>>>>>> Stashed changes
+>>>>>>> Jeff

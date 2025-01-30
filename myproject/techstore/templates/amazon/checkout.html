@@ -12,51 +12,106 @@
 
 {% block body %}
   
-    <div class="checkout-header">
-      <div class="header-content">
-        <div class="checkout-header-left-section">
-          <a href="{% url "product_list" %}">
-            <img class="amazon-logo" src="{% static 'techstore/images/amazon-logo.png' %}">
-            <img class="amazon-mobile-logo" src="{% static 'techstore/images/amazon-mobile-logo.png' %}">
-          </a>
+<div class="amazon-header">
+  <div class="amazon-header-left-section">
+      <a href="{% url 'product_list' %}" class="header-link">
+          <img class="amazon-logo" src="{% static 'techstore/images/amazon-logo-white.png' %}">
+          <img class="amazon-mobile-logo" src="{% static 'techstore/images/amazon-mobile-logo-white.png' %}">
+      </a>
+  </div>
+
+  <div class="amazon-header-middle-section">
+      <input class="search-bar" type="text" placeholder="Search">
+      <button class="search-button">
+          <img class="search-icon" src="{% static 'techstore/images/icons/search-icon.png' %}">
+      </button>
+  </div>
+
+  <div class="amazon-header-right-section">
+      <a class="orders-link header-link" href="{% url 'orders' %}">
+          <span class="returns-text">Returns</span>
+          <span class="orders-text">& Orders</span>
+      </a>
+
+      <a class="cart-link header-link" href="{% url 'checkout' %}">
+          <img class="cart-icon" src="{% static 'techstore/images/icons/cart-icon.png' %}">
+          <div class="cart-quantity js-cart-quantity">{{ total_quantity }}</div>
+          <div class="cart-text">Cart</div>
+      </a>
+  </div>
+</div>
+
+
+
+
+<div class="main">
+    <div class="page-title">Review your order</div>
+
+    {% if order_items %}
+    <form method="post" action="{% url 'checkout' %}">
+        {% csrf_token %}
+        
+        <div class="checkout-grid">
+            <div class="">
+                {% for item in order_items %}
+                <div class="cart-item-container">
+                    <div class="delivery-date">
+                        Estimated delivery date: {{ item.order.estimated_delivery_date|date:"F j, Y" }}
+                    </div>
+
+                    <div class="cart-item-details-grid">
+                        <img class="product-image" src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+
+                        <div class="cart-item-details">
+                            <div class="product-name">{{ item.product.name }}</div>
+                            <div class="product-price">Price: ₦{{ item.price|floatformat:2 }}</div>
+                            
+                            <!-- Quantity Dropdown -->
+                            <label for="quantity_{{ item.id }}">Quantity:</label>
+                            <select name="quantity_{{ item.id }}" id="quantity_{{ item.id }}">
+                                {% for i in "123456789" %}
+                                <option value="{{ i }}" {% if item.quantity == i|add:0 %}selected{% endif %}>{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-5">
+                          <!-- Checkbox to select the product -->
+                      <label>
+                        <input type="checkbox" name="selected_products" value="{{ item.id }}">
+                          Select this product
+                      </label>
+
+                      <!-- Remove Button -->
+                      <a href="{% url 'remove_from_cart' item.id %}" class="remove-button btn btn-outline-danger">Remove</a>
+                    </div>
+                    
+                </div>
+                {% endfor %}
+                
+                <button type="submit" class="button-primary btn my-5">Update Order Summary</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Order Summary -->
+    <div class="payment-summary">
+        <div class="payment-summary-title">Order Summary</div>
+
+        <div class="payment-summary-row">
+            <div>Items ({{ selected_items|length }}):</div>
+            <div class="payment-summary-money">₦{{ order_summary.total_price|floatformat:2 }}</div>
         </div>
 
-        <div class="checkout-header-middle-section">
-          Checkout (<a class="return-to-home-link"
-            href="{% url "product_list" %}">3 items</a>)
+        <div class="payment-summary-row">
+            <div>Shipping & handling:</div>
+            <div class="payment-summary-money">₦{{ order_summary.shipping_cost|floatformat:2 }}</div>
         </div>
 
-        <div class="checkout-header-right-section">
-          <img src="{% static 'techstore/images/icons/checkout-lock-icon.png' %}">
-        </div>
-      </div>
-    </div>
-
-    <div class="main">
-      <div class="page-title">Review your order</div>
-
-      <div class="checkout-grid">
-        <div class="order-summary js-order-summary">
-          
-        </div>
-
-        <div class="payment-summary">
-          <div class="payment-summary-title">
-            Order Summary
-          </div>
-
-          <div class="payment-summary-row">
-            <div>Items (3):</div>
-            <div class="payment-summary-money">$42.75</div>
-          </div>
-
-          <div class="payment-summary-row">
-            <div>Shipping &amp; handling:</div>
-            <div class="payment-summary-money">$4.99</div>
-          </div>
-
-          <div class="payment-summary-row subtotal-row">
+        <div class="payment-summary-row subtotal-row">
             <div>Total before tax:</div>
+<<<<<<< Updated upstream
             <div class="payment-summary-money">$47.74</div>
           </div>
 
@@ -70,50 +125,49 @@
             <div class="payment-summary-money">$52.51</div>
           </div>
 
-          <form method="post" action="{% url 'checkout' %}">
-            {% csrf_token %}
-            <button type="submit" class="place-order-button button-primary">
-              Place your order
-            </button>
-          </form>
+          <button class="place-order-button button-primary">
+            Place your order
+          </button>
+=======
+            <div class="payment-summary-money">₦{{ order_summary.total_price|floatformat:2 }}</div>
+>>>>>>> Stashed changes
         </div>
-      </div>
+
+        <div class="payment-summary-row">
+            <div>Estimated tax ({{ order_summary.tax_rate }}%):</div>
+            <div class="payment-summary-money">₦{{ order_summary.tax|floatformat:2 }}</div>
+        </div>
+
+        <div class="payment-summary-row total-row">
+            <div>Order total:</div>
+            <div class="payment-summary-money">₦{{ order_summary.final_total|floatformat:2 }}</div>
+        </div>
+
+        <form method="post" action="{% url 'checkout' %}">
+            {% csrf_token %}
+            <button type="submit" class="place-order-button button-primary">Place your order</button>
+        </form>
     </div>
+
+    {% else %}
+    <p class="no-items">No items in your cart to checkout.</p>
+    {% endif %}
+</div>
+
+    
+
+
+  
 
 
 {% endblock body %}
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-      const cartQuantityElement = document.querySelector('.js-cart-quantity');
-  
-      // Function to update cart quantity dynamically
-      function updateCartQuantity(quantity) {
-          if (cartQuantityElement) {
-              cartQuantityElement.textContent = quantity;
-          }
-      }
-  
-      // Listen for "cart-updated" event
-      document.body.addEventListener('cart-updated', (event) => {
-          updateCartQuantity(event.detail.total_quantity);
-      });
-  
-      // Example: After receiving response from server for adding to cart
-      const addToCartButtons = document.querySelectorAll('.add-to-cart');  // Assuming your buttons have a class like "add-to-cart"
-  
-      addToCartButtons.forEach(button => {
-          button.addEventListener('click', () => {
-              const productId = button.dataset.productId;  // Assuming you're passing the product ID as a data attribute on the button
-              fetch('/add_to_cart/' + productId)
-                  .then(response => response.json())
-                  .then(data => {
-                      const event = new CustomEvent('cart-updated', { detail: { total_quantity: data.total_quantity } });
-                      document.body.dispatchEvent(event);
-                  });
-          });
-      });
-  });
-  </script>
+
+
+
+
+
+
+
   
   <span class="js-cart-quantity">{{ total_quantity }}</span>
   
