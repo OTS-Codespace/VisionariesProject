@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["endfor", "techstore"]
+  "cSpell.words": ["endfor", "techstore"],
+  "codium.codeCompletion.enable": true
 }
